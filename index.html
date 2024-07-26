@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate What Others Owe You in Seconds!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            display: inline-block;
+            text-align: left;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .row input {
+            width: 45%;
+            padding: 5px;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .iOweButton {
+            background-color: #de1a24;
+        }
+        .theyOweButton {
+            background-color: #3f8f29;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .currency-select {
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>What You Owe Me</h1>
+    <p>Calculate the money others owe you in seconds.</p>
+    <div class="currency-select">
+        <label for="currency">Currency:</label>
+        <select id="currency" onchange="calculateBalance()">
+            <option value="USD" selected>USD ($)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="AUD">AUD (A$)</option>
+            <option value="CHF">CHF (Fr)</option>
+            <option value="CNY">CNY (¥)</option>
+            <option value="SEK">SEK (kr)</option>
+            <option value="NZD">NZD (NZ$)</option>
+            <option value="SGD">SGD (S$)</option>
+            <option value="HKD">HKD (HK$)</option>
+            <option value="NOK">NOK (kr)</option>
+            <option value="KRW">KRW (₩)</option>
+            <option value="MXN">MXN (MX$)</option>
+            <option value="ZAR">ZAR (R)</option>
+            <!-- Add more currencies as needed -->
+        </select>
+    </div>
+    <div class="container">
+        <div id="iOweSection">
+            <h2>I Owe, What you owe to others</h2>
+            <div class="row">
+                <input type="text" placeholder="Name">
+                <input type="number" placeholder="Amount" oninput="calculateBalance()">
+            </div>
+        </div>
+        <button class="button iOweButton" onclick="addRow('iOweSection')">+ Add New</button>
+        <div id="theyOweSection">
+            <h2>They Owe, What others owe to you</h2>
+            <div class="row">
+                <input type="text" placeholder="Name">
+                <input type="number" placeholder="Amount" oninput="calculateBalance()">
+            </div>
+        </div>
+        <button class="button theyOweButton" onclick="addRow('theyOweSection')">+ Add New</button>
+    </div>
+    <div class="result" id="resultMessage"></div>
+    <script>
+        const oweMessages = [
+            "🏃‍♂️ Time to hide! You owe them {{amount}}.",
+            "😱 Uh-oh, you're in debt! You owe them {{amount}}.",
+            "💸 Start saving! You owe them {{amount}}.",
+            "💵 Better pay up! You owe them {{amount}}.",
+            "🚨 Escape! You owe them {{amount}}.",
+            "🔔 Debt alert! You owe them {{amount}}.",
+            "🏃‍♀️ Run for it! You owe them {{amount}}.",
+            "💥 Brace yourself! You owe them {{amount}}.",
+            "💪 Time to hustle! You owe them {{amount}}.",
+            "🎺 Pay the piper! You owe them {{amount}}.",
+            "🏃‍♂️ Don't look back! You owe them {{amount}}.",
+            "🎭 Debt drama! You owe them {{amount}}.",
+            "💰 Gotta pay up! You owe them {{amount}}.",
+            "🎶 Time to face the music! You owe them {{amount}}.",
+            "🕵️‍♂️ Debt detective! You owe them {{amount}}.",
+            "😷 Cough it up! You owe them {{amount}}.",
+            "🕳️ Don't hide! You owe them {{amount}}.",
+            "⚖️ Time to settle up! You owe them {{amount}}.",
+            "🍴 Fork it over! You owe them {{amount}}.",
+            "🏦 Better start saving! You owe them {{amount}}.",
+            "📅 Debt day! You owe them {{amount}}.",
+            "⏰ Payback time! You owe them {{amount}}.",
+            "👾 Debt monster! You owe them {{amount}}.",
+            "👛 Open your wallet! You owe them {{amount}}.",
+            "🌪️ Debt storm! You owe them {{amount}}."
+        ];
+
+        const theyOweMessages = [
+            "💰 Collect your cash! They owe you {{amount}}.",
+            "💸 Time to cash in! They owe you {{amount}}.",
+            "👀 Don't lose sight! They owe you {{amount}}.",
+            "💵 Cha-ching! They owe you {{amount}}.",
+            "🎉 Money's coming! They owe you {{amount}}.",
+            "🤑 Get what's yours! They owe you {{amount}}.",
+            "🥳 Payday! They owe you {{amount}}.",
+            "🛎️ Time to collect! They owe you {{amount}}.",
+            "🏦 Money in the bank! They owe you {{amount}}.",
+            "📈 Debt collection! They owe you {{amount}}.",
+            "🚨 Cash alert! They owe you {{amount}}.",
+            "🍀 Count your blessings! They owe you {{amount}}.",
+            "🔮 Money magnet! They owe you {{amount}}.",
+            "🎊 Time to celebrate! They owe you {{amount}}.",
+            "✨ Money magic! They owe you {{amount}}.",
+            "🌟 Dollar dreams! They owe you {{amount}}.",
+            "🏆 Reward time! They owe you {{amount}}.",
+            "😊 Debt delight! They owe you {{amount}}.",
+            "🎈 Cash party! They owe you {{amount}}.",
+            "🌞 Time to shine! They owe you {{amount}}.",
+            "💳 Bank it! They owe you {{amount}}.",
+            "💰 Gold rush! They owe you {{amount}}.",
+            "💃 Dollar dance! They owe you {{amount}}.",
+            "👑 Cash kingdom! They owe you {{amount}}.",
+            "🎉 Money moment! They owe you {{amount}}."
+        ];
+
+        const settledUpMessages = [
+            "🎉 Everything is squared away! All settled up!",
+            "🥳 Good job! Everything is settled!",
+            "🌟 You're all set! All settled up!",
+            "🏅 Victory! All settled up!",
+            "🚀 Mission accomplished! All settled up!",
+            "😃 No more debts! All settled up!",
+            "🏆 Winning! All settled up!",
+            "🎊 Celebration time! All settled up!",
+            "🎈 It's all good! All settled up!",
+            "😎 Cool! Everything is settled!",
+            "🌈 Bright and clear! All settled up!",
+            "💪 Strong finish! All settled up!",
+            "🎆 Fireworks! Everything is settled!",
+            "💫 Starry success! All settled up!",
+            "👌 Perfectly balanced! All settled up!",
+            "✨ Sparkling clean! All settled up!",
+            "👍 Thumbs up! Everything is settled!",
+            "🎁 Gift of peace! All settled up!",
+            "🌺 Flower power! All settled up!",
+            "🎵 Music to your ears! All settled up!",
+            "🏖️ Relax, it's all settled up!",
+            "🌟 Shining bright! All settled up!",
+            "🚢 Smooth sailing! Everything is settled!",
+            "🎤 Mic drop! All settled up!",
+            "🎬 Scene complete! All settled up!",
+            "🍾 Pop the champagne! Everything is settled!",
+            "🛡️ Protected and settled up!",
+            "🕺 Dance away! Everything is settled!",
+            "💌 Love and peace! All settled up!",
+            "🎨 Artful balance! All settled up!",
+            "🧩 Puzzle complete! Everything is settled!",
+            "🧘 Zen mode: activated! All settled up!",
+            "🎖️ Medal of honor! All settled up!",
+            "📦 Package delivered! Everything is settled!",
+            "🌍 Global peace! All settled up!",
+            "🌟 Star-struck! Everything is settled!",
+            "🕊️ Peaceful resolution! All settled up!",
+            "💃 Dance it out! All settled up!",
+            "🎡 Ferris wheel fun! Everything is settled!",
+            "🧁 Sweet success! All settled up!",
+            "🌺 Blossom and balance! All settled up!",
+            "🎨 Colorful completion! Everything is settled!",
+            "🏡 Home sweet home! All settled up!",
+            "🎀 Ribbon-tied success! All settled up!",
+            "🚗 Road to peace! Everything is settled!",
+            "🎸 Rock on! All settled up!",
+            "🧳 Journey’s end! All settled up!"
+        ];
+
+        function addRow(sectionId) {
+            const section = document.getElementById(sectionId);
+            const row = document.createElement('div');
+            row.className = 'row';
+            row.innerHTML = `
+                <input type="text" placeholder="Name">
+                <input type="number" placeholder="Amount" oninput="calculateBalance()">
+            `;
+            section.appendChild(row);
+        }
+
+        function calculateBalance() {
+            let iOweTotal = 0;
+            let theyOweTotal = 0;
+
+            // Get selected currency
+            const currency = document.getElementById('currency').value;
+            let currencySymbol = '$'; // Default to USD
+
+            switch (currency) {
+                case 'INR':
+                    currencySymbol = '₹';
+                    break;
+                case 'EUR':
+                    currencySymbol = '€';
+                    break;
+                case 'GBP':
+                    currencySymbol = '£';
+                    break;
+                case 'JPY':
+                    currencySymbol = '¥';
+                    break;
+                case 'CAD':
+                    currencySymbol = 'C$';
+                    break;
+                case 'AUD':
+                    currencySymbol = 'A$';
+                    break;
+                case 'CHF':
+                    currencySymbol = 'Fr';
+                    break;
+                case 'CNY':
+                    currencySymbol = '¥';
+                    break;
+                case 'SEK':
+                    currencySymbol = 'kr';
+                    break;
+                case 'NZD':
+                    currencySymbol = 'NZ$';
+                    break;
+                case 'SGD':
+                    currencySymbol = 'S$';
+                    break;
+                case 'HKD':
+                    currencySymbol = 'HK$';
+                    break;
+                case 'NOK':
+                    currencySymbol = 'kr';
+                    break;
+                case 'KRW':
+                    currencySymbol = '₩';
+                    break;
+                case 'MXN':
+                    currencySymbol = 'MX$';
+                    break;
+                case 'ZAR':
+                    currencySymbol = 'R';
+                    break;
+                // Add more cases for other currencies if needed
+            }
+
+            // Calculate total for "I Owe"
+            document.querySelectorAll('#iOweSection input[type="number"]').forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                iOweTotal += value;
+            });
+
+            // Calculate total for "They Owe"
+            document.querySelectorAll('#theyOweSection input[type="number"]').forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                theyOweTotal += value;
+            });
+
+            // Determine balance and display result
+            const balance = theyOweTotal - iOweTotal;
+            let message = '';
+
+            if (balance > 0) {
+                // They owe you money
+                const randomMessage = theyOweMessages[Math.floor(Math.random() * theyOweMessages.length)];
+                message = randomMessage.replace('{{amount}}', balance % 1 === 0 ? `${currencySymbol}${balance}` : `${currencySymbol}${balance.toFixed(2)}`);
+            } else if (balance < 0) {
+                // You owe them money
+                const randomMessage = oweMessages[Math.floor(Math.random() * oweMessages.length)];
+                message = randomMessage.replace('{{amount}}', (-balance) % 1 === 0 ? `${currencySymbol}${-balance}` : `${currencySymbol}${(-balance).toFixed(2)}`);
+            } else {
+                // All settled up
+                const randomMessage = settledUpMessages[Math.floor(Math.random() * settledUpMessages.length)];
+                message = randomMessage;
+            }
+
+            document.getElementById('resultMessage').innerText = message;
+        }
+    </script>
+</body>
+</html>
