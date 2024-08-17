@@ -1,0 +1,182 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    transition: background-color 0.5s ease;
+}
+h1, p {
+    text-align: center;
+}
+.currency-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.currency-select label {
+    margin-right: 10px; /* Adjust the spacing as needed */
+    
+}
+
+.currency-select select {
+    width: 150px; /* Set the width of the dropdown as needed */
+    padding: 8px; /* Adjust padding for better appearance */
+    box-sizing: border-box; /* Ensure padding doesn't affect the width */
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 0; /* Ensure no extra top margin */
+    margin-bottom: 0; /* Ensure no extra bottom margin */
+}
+
+
+.name-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.name-section input {
+    width: calc(100% - 70px);
+    margin-right: 10px;
+    max-width: 300px; /* Adjust the max-width as needed */
+}
+
+.name-section span {
+    white-space: nowrap;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form-section, .chart-section {
+    flex: 1;
+    padding: 10px;
+    width: 100%;
+}
+input, select {
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+.item-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.item-row input[type="text"],
+.item-row input[type="number"] {
+    flex: 1;
+    padding: 12px; /* Larger padding for easier input */
+}
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+}
+.moment-of-truth {
+    background-color: #007BFF; /* Light blue background */
+    color: white; /* White text for contrast */
+    border: none; /* No border for a cleaner look */
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 1.3em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.2s;
+    text-align: center;
+    display: block;
+}
+.moment-of-truth:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+    transform: translateY(-2px); /* Gentle lift effect */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+.result {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: none;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 600px) {
+    .name-section input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .item-row {
+        flex-direction: column;
+    }
+    .item-row input[type="text"],
+    .item-row input[type="number"] {
+        width: 100%;
+        padding: 12px; /* Ensure padding is larger for mobile */
+    }
+    .chart-section {
+        width: 100%;
+        overflow: hidden;
+    }
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* Media Query for Desktop Devices */
+@media (min-width: 601px) {
+    .card {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .item-row input[type="text"],
+    .item-row input[type="number"] {
+        padding: 8px; /* Smaller padding for desktop */
+    }
+    .form-section {
+        max-width: 50%;
+    }
+    .chart-section {
+        max-width: 50%;
+    }
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* Safari Specific Fixes */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    .item-row {
+        display: -webkit-flex;
+        display: flex;
+    }
+    .item-row input[type="text"],
+    .item-row input[type="number"] {
+        -webkit-flex: 1;
+        flex: 1;
+    }
+  }
+}
+/*Trying Squared up effect and sound */
+
+
